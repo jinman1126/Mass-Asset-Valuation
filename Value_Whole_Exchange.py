@@ -51,6 +51,7 @@ def getdata(ticker):
     
         return(datelist,closingprices,dividends)
     
+    #handle failed requests... sometimes service fails to return data
     except urllib.error.HTTPError:
         
         datelist='lookup error'
@@ -91,8 +92,7 @@ def calc_sigma(closingprices):
             
     except TypeError:
         returns=0
-    
-            
+        
     except IndexError:
         returns=0
              
@@ -366,13 +366,12 @@ i=0
 with open(fname,'a') as f: #create our data file
        
     writer=csv.writer(f,dialect="excel")
-    test=50
     
-    for test in range(len(Tickers)): #for each stock ticker
+    for i in range(len(Tickers)): #for each stock ticker
         try:  
                 
-            print(Tickers[test], " Loading...") #print outs to know its working
-            data=getdata(Tickers[test]) #retrieve the data via api
+            print(Tickers[i], " Loading...") #print outs to know its working
+            data=getdata(Tickers[i]) #retrieve the data via api
         
             dates=data[0] #sort the data into our necessary parts 
             closing=data[1]
@@ -389,16 +388,16 @@ with open(fname,'a') as f: #create our data file
             Asset_Value=monte_carlo_asset_valuation(closing,sigmas[3],divYield,poisson_jumps[0],poisson_jumps[1],poisson_jumps[2])
         
         #return a value
-            print(test, '--',Tickers[test], '--', Asset_Value, '--', closing[0], '--', 'Change: ', Asset_Value-closing[0])
+            print(test, '--',Tickers[i], '--', Asset_Value, '--', closing[0], '--', 'Change: ', Asset_Value-closing[0])
         
             #dictate what we want to dump in the .dat file
-            output=(Tickers[test],Asset_Value,dates,closing,divs,sigmas,poisson_jumps,divYield)
+            output=(Tickers[i],Asset_Value,dates,closing,divs,sigmas,poisson_jumps,divYield)
             writer.writerow(output) #write the data
             test+=1
         
         except TypeError:
-            print(test, '--', Tickers[test], 'Type Error')
-            output=(Tickers[test],Asset_Value,dates,closing,divs,sigmas,poisson_jumps,divYield, 'type error' )
+            print(test, '--', Tickers[i], 'Type Error')
+            output=(Tickers[i],Asset_Value,dates,closing,divs,sigmas,poisson_jumps,divYield, 'type error' )
             writer.writerow(output)
             test+=1
 f.close()
