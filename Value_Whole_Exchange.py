@@ -189,7 +189,7 @@ def monte_carlo_asset_valuation(closingprices,sigma,divYield,num_Jumps_up,num_Ju
     
     try:
         n = 500 #time steps for each trading day
-        Trials = 100 #simulations per run
+        Trials = 10000 #simulations per run
         T=21/252 #time steps per day
         h= T/n
         
@@ -353,8 +353,6 @@ def tickerlists(tickerlist):
 fname="valuations.dat" #output file name
 #choose your exchange or other list from available options below
 f_NASDAQ="nasdaq_symbols.txt"
-f_NYSE="nyse_symbols.txt"
-f_AMEX="amex_symbols.txt"
 f_sp500="sp500.txt"
 
 tickers=["NASDAQ:AAPL"]
